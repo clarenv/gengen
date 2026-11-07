@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Arcade | Gelgel</title>
+    <link rel="stylesheet" href="/static/css/arcade.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="arcade-container">
+        <a href="/" class="back-btn">← BACK TO LOBBY</a>
+
+        <div class="arcade-heading">
+            <span>✦ SECRET ACCESS GRANTED ✦</span>
+            <h1>THE <span class="gold-text">ARCADE</span></h1>
+            <p>Welcome to Gelgel's private game room.</p>
+            <small>No bets. No money. Just pure fun!</small>
+        </div>
+
+        <div class="game-selection">
+            <button class="game-tab active" data-game="colorGame">🎨 COLOR GAME</button>
+            <button class="game-tab" data-game="unoGame">🃏 UNO GAME</button>
+            <button class="game-tab" data-game="memoryGame">🧠 MEMORY MATCH</button>
+        </div>
+
+        <!-- COLOR GAME -->
+        <div class="game-panel active" id="colorGame">
+            <h2>GUESS THE COLOR</h2>
+            <p>Choose the correct color shown below!</p>
+            <div class="color-display" id="colorDisplay">READY?</div>
+            <div class="color-options" id="colorOptions"></div>
+            <h3 id="colorMessage">Press START GAME to begin!</h3>
+            <p>Score: <span id="colorScore">0</span></p>
+            <button class="game-start-btn" id="startColorGame">START GAME</button>
+        </div>
+
+        <!-- UNO GAME -->
+        <div class="game-panel" id="unoGame">
+            <h2>UNO — YOU VS CPU</h2>
+            <p>Match the color or number. Click a card to play it!</p>
+            <div class="uno-stats">
+                <span>CPU Cards: <b id="unoCpuCount">0</b></span>
+                <span>Your Cards: <b id="unoPlayerCount">0</b></span>
+            </div>
+            <div class="uno-top-card" id="unoTopCard">—</div>
+            <h3 id="unoMessage">Press START to deal the cards.</h3>
+            <div class="uno-hand" id="unoPlayerHand"></div>
+            <button class="game-start-btn" id="startUnoGame">START GAME</button>
+        </div>
+
+        <!-- MEMORY GAME -->
+        <div class="game-panel" id="memoryGame">
+            <h2>MEMORY MATCH</h2>
+            <p>Find all matching pairs of cards!</p>
+            <div class="memory-stats">
+                <span>Moves: <b id="memoryMoves">0</b></span>
+                <span>Pairs: <b id="memoryPairs">0</b>/4</span>
+            </div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <h3 id="memoryMessage">Ready to test your memory?</h3>
+            <button class="game-start-btn" id="restartMemory">RESTART GAME</button>
+        </div>
+
+        <div class="arcade-footer">
+            <p>♠ GELGEL ARCADE ♠</p>
+            <small>ENTERTAINMENT ONLY • NO GAMBLING</small>
+        </div>
+    </div>
+
+    <script src="/static/js/arcade.js"></script>
+</body>
+</html>
