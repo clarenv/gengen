@@ -1,6 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // 1. MOBILE MENU
+    // ==========================================
+    // 1. AUDIO PLAYER (Autoplay at Mute/Unmute)
+    // ==========================================
+    const bgMusic = document.getElementById("bgMusic");
+    const audioBtn = document.getElementById("audioBtn");
+    const audioIcon = audioBtn ? audioBtn.querySelector('.icon') : null;
+    const audioText = audioBtn ? audioBtn.querySelector('.btn-text') : null;
+
+    if (bgMusic && audioBtn) {
+        bgMusic.volume = 0.3; // Lakas ng audio (0.0 to 1.0)
+        
+        // Pilitin mag-play agad pagka-load ng page
+        let playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // Matagumpay ang autoplay
+                if(audioIcon) audioIcon.innerText = "🔊";
+                if(audioText) audioText.innerText = "MUTE";
+            }).catch(error => {
+                // Na-block ng browser ang autoplay
+                console.log("Autoplay prevented. User needs to interact.");
+                if(audioIcon) audioIcon.innerText = "🔇";
+                if(audioText) audioText.innerText = "UNMUTE";
+            });
+        }
+
+        // Logic kapag pinindot yung Audio Button
+        audioBtn.addEventListener("click", () => {
+            if (bgMusic.muted) {
+                // I-unmute
+                bgMusic.muted = false;
+                if(audioIcon) audioIcon.innerText = "🔊";
+                if(audioText) audioText.innerText = "MUTE";
+                bgMusic.play(); // Ensure na tumutugtog
+            } else {
+                // I-mute
+                bgMusic.muted = true;
+                if(audioIcon) audioIcon.innerText = "🔇";
+                if(audioText) audioText.innerText = "UNMUTE";
+            }
+        });
+    }
+
+    // ==========================================
+    // 2. MOBILE MENU
+    // ==========================================
     const menuToggle = document.getElementById("menuToggle");
     const navLinks = document.getElementById("navLinks");
     if(menuToggle && navLinks) {
@@ -10,34 +55,33 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. 3D TILT EFFECT SA PICTURE (Sumusunod sa Cursor)
+    // ==========================================
+    // 3. 3D TILT EFFECT SA PICTURE
+    // ==========================================
     const tiltFrame = document.getElementById("tiltFrame");
     const heroSection = document.querySelector('.hero');
     
     if(tiltFrame && heroSection) {
-        // Kapag gumalaw ang mouse sa loob ng hero section
         heroSection.addEventListener('mousemove', (e) => {
-            // Kunin ang posisyon ng mouse
-            let xAxis = (window.innerWidth / 2 - e.pageX) / 25; // 25 = bilis ng ikot
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
             let yAxis = (window.innerHeight / 2 - e.pageY) / 25;
             
-            // I-apply ang rotation
             tiltFrame.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Kapag umalis ang mouse, babalik sa gitna
         heroSection.addEventListener('mouseleave', () => {
             tiltFrame.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            tiltFrame.style.transition = "transform 0.5s ease"; // Smooth na pagbalik
+            tiltFrame.style.transition = "transform 0.5s ease"; 
         });
 
-        // Kapag pumasok ulit ang mouse, tanggalin yung transition para mabilis sumunod
         heroSection.addEventListener('mouseenter', () => {
             tiltFrame.style.transition = "transform 0.1s ease-out";
         });
     }
 
-    // 3. SECRET ARCADE BUTTON REVEAL
+    // ==========================================
+    // 4. SECRET ARCADE BUTTON REVEAL
+    // ==========================================
     const secretBtn = document.getElementById("secretGamesBtn");
     const secretLogo = document.getElementById("secretLogo");
     let logoClicks = 0;
