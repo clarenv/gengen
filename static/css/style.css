@@ -131,6 +131,37 @@ h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; text-transform: u
 .footer { border-top: 1px solid rgba(212, 175, 55, 0.2); padding: 30px 0; background: #050202; }
 .footer-content { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.8rem; }
 
+/* =========================================
+   AUDIO BUTTON STYLES (IDINAGDAG)
+========================================= */
+.audio-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    background: var(--bg-card);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s;
+}
+
+.audio-btn:hover {
+    background: var(--gold);
+    color: var(--bg-dark);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; text-align: center; padding-top: 50px; }
@@ -141,4 +172,12 @@ h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; text-transform: u
     .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-dark); padding: 20px; }
     .nav-links.active { display: flex; }
     .footer-content { flex-direction: column; text-align: center; gap: 15px; }
+
+    /* Audio button mobile adjustments */
+    .audio-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        font-size: 0.7rem;
+    }
 }
