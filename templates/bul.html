@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Gelgel | The High Roller Portfolio</title>
 
     <!-- CSS -->
@@ -28,11 +30,18 @@
         <source src="/static/audio/spa.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- SECRET GAME ROOM BUTTON -->
+    <button id="secretGamesBtn" class="secret-games-btn">
+        🎮 ENTER SECRET GAME ROOM
+    </button>
+
     <!-- NAVIGATION -->
     <header class="header">
         <div class="navbar container">
 
-            <a href="#home" class="logo">GELGEL<span>♠</span></a>
+            <a href="#home" class="logo" id="secretLogo">
+                GELGEL<span>♠</span>
+            </a>
 
             <button class="menu-toggle" id="menuToggle">MENU</button>
 
@@ -294,6 +303,134 @@
 
     </main>
 
+    <!-- ==================================
+         SECRET GAME ROOM
+    ================================== -->
+
+    <div class="game-room" id="gameRoom">
+
+        <div class="game-container">
+
+            <!-- CLOSE BUTTON -->
+            <button class="close-game" id="closeGame" aria-label="Close Game Room">
+                ✕
+            </button>
+
+            <!-- GAME HEADER -->
+            <div class="game-heading">
+
+                <span>✦ SECRET ACCESS GRANTED ✦</span>
+
+                <h1>
+                    THE <span class="gold-text">ARCADE</span>
+                </h1>
+
+                <p>Welcome to Gelgel's private game room.</p>
+
+                <small>
+                    No bets. No money. Just pure fun!
+                </small>
+
+            </div>
+
+            <!-- GAME SELECTION -->
+            <div class="game-selection">
+
+                <button class="game-tab active" data-game="colorGame">
+                    🎨 COLOR GAME
+                </button>
+
+                <button class="game-tab" data-game="memoryGame">
+                    🧠 MEMORY MATCH
+                </button>
+
+            </div>
+
+            <!-- ==================================
+                 COLOR GUESSING GAME
+            ================================== -->
+
+            <div class="game-panel active" id="colorGame">
+
+                <h2>GUESS THE COLOR</h2>
+
+                <p>
+                    Choose the correct color shown below!
+                </p>
+
+                <div class="color-display" id="colorDisplay">
+                    READY?
+                </div>
+
+                <div class="color-options" id="colorOptions">
+
+                    <button class="color-option" aria-label="Color option 1"></button>
+                    <button class="color-option" aria-label="Color option 2"></button>
+                    <button class="color-option" aria-label="Color option 3"></button>
+                    <button class="color-option" aria-label="Color option 4"></button>
+
+                </div>
+
+                <h3 id="colorMessage">
+                    Press START GAME to begin!
+                </h3>
+
+                <p>
+                    Score: <span id="colorScore">0</span>
+                </p>
+
+                <button class="game-start-btn" id="startColorGame">
+                    START GAME
+                </button>
+
+            </div>
+
+            <!-- ==================================
+                 MEMORY MATCH GAME
+            ================================== -->
+
+            <div class="game-panel" id="memoryGame">
+
+                <h2>MEMORY MATCH</h2>
+
+                <p>
+                    Find all matching pairs of cards!
+                </p>
+
+                <div class="memory-stats">
+
+                    <span>
+                        Moves: <b id="memoryMoves">0</b>
+                    </span>
+
+                    <span>
+                        Pairs: <b id="memoryPairs">0</b>/4
+                    </span>
+
+                </div>
+
+                <div class="memory-grid" id="memoryGrid"></div>
+
+                <h3 id="memoryMessage">
+                    Ready to test your memory?
+                </h3>
+
+                <button class="game-start-btn" id="restartMemory">
+                    RESTART GAME
+                </button>
+
+            </div>
+
+            <!-- GAME ROOM FOOTER -->
+            <div class="game-footer">
+                <p>♠ GELGEL ARCADE ♠</p>
+                <small>ENTERTAINMENT ONLY • NO GAMBLING</small>
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- FOOTER -->
     <footer class="footer">
 
@@ -312,4 +449,3 @@
 
 </body>
 </html>
-```
