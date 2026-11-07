@@ -65,8 +65,8 @@ h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; text-transform: u
     position: relative; width: 320px; height: 400px; background: #000; 
     border: 3px solid var(--gold); border-radius: 12px; padding: 10px; 
     box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); 
-    transform-style: preserve-3d; /* Para gumana ang 3D */
-    transition: transform 0.1s ease-out; /* Smooth na paggalaw */
+    transform-style: preserve-3d; 
+    transition: transform 0.1s ease-out; 
     z-index: 2; 
 }
 .profile-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; filter: sepia(30%) contrast(1.1) brightness(0.9); transition: filter 0.5s; }
@@ -96,14 +96,23 @@ h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; text-transform: u
 .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
 .card { background: var(--bg-card); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 12px; overflow: hidden; transition: transform 0.3s; }
 .card:hover { transform: translateY(-8px); border-color: var(--gold); }
-.card-img { height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.card-img { height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
 
 /* App Backgrounds */
 .bg-app1 { background: linear-gradient(135deg, #8b1a1a, #3a0505); }
 .bg-app2 { background: linear-gradient(135deg, #1a2a8b, #05053a); }
 
-/* Certificate Background */
-.bg-cert { background: linear-gradient(135deg, #2a2a2a, #0a0a0a); border-bottom: 2px solid var(--gold); }
+/* Certificate Background & Image Fix */
+.bg-cert { background: #000; border-bottom: 2px solid var(--gold); padding: 0; }
+.bg-cert img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Para hindi mabatak ang picture at mag-fill sa box */
+    transition: transform 0.4s ease; 
+}
+.card:hover .bg-cert img { 
+    transform: scale(1.05); /* Zoom effect pag hinover */
+}
 .cert-icon { font-size: 3rem; margin-bottom: 10px; }
 .cert-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); }
 
@@ -132,7 +141,7 @@ h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 20px; text-transform: u
 .footer-content { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.8rem; }
 
 /* =========================================
-   AUDIO BUTTON STYLES (IDINAGDAG)
+   AUDIO BUTTON STYLES
 ========================================= */
 .audio-btn {
     position: fixed;
