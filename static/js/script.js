@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
 
     // ==========================================
@@ -148,18 +147,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================
-    // SECRET GAME ROOM
+    // SECRET GAME ROOM — LOGO CLICK 3x + HOTKEY "G"
     // ==========================================
 
     const secretGamesBtn = document.getElementById("secretGamesBtn");
+    const secretLogo = document.getElementById("secretLogo");
     const gameRoom = document.getElementById("gameRoom");
     const closeGame = document.getElementById("closeGame");
 
+    // --- Logo click 3 times to reveal ---
+    let logoClicks = 0;
+    let logoClickTimer = null;
+
+    if (secretLogo && secretGamesBtn) {
+
+        secretLogo.addEventListener("click", (e) => {
+
+            logoClicks++;
+            clearTimeout(logoClickTimer);
+
+            logoClickTimer = setTimeout(() => {
+                logoClicks = 0;
+            }, 1500);
+
+            if (logoClicks >= 3) {
+
+                e.preventDefault();
+
+                secretGamesBtn.style.display = "block";
+                secretGamesBtn.textContent = "🎮 SECRET UNLOCKED — ENTER ARCADE";
+
+                logoClicks = 0;
+
+            }
+
+        });
+
+    }
+
+    // --- Hotkey "G" to reveal ---
+    document.addEventListener("keydown", (e) => {
+
+        if (
+            e.key.toLowerCase() === "g" &&
+            !e.target.matches("input, textarea") &&
+            secretGamesBtn
+        ) {
+            secretGamesBtn.style.display = "block";
+        }
+
+    });
+
+
+    // --- Open / Close game room ---
     function openGameRoom() {
 
         if (!gameRoom) return;
 
-        gameRoom.classList.add("active");
+        gameRoom.classList.add("open");
+        gameRoom.classList.add("active"); // fallback for other CSS versions
         document.body.style.overflow = "hidden";
 
     }
@@ -168,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!gameRoom) return;
 
+        gameRoom.classList.remove("open");
         gameRoom.classList.remove("active");
         document.body.style.overflow = "";
 
@@ -189,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    // Close using ESC key
+    // Close with ESC
     document.addEventListener("keydown", event => {
 
         if (event.key === "Escape") {
@@ -197,6 +244,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
+
+    // Click outside container to close
+    if (gameRoom) {
+
+        gameRoom.addEventListener("click", (e) => {
+
+            if (e.target === gameRoom) {
+                closeGameRoom();
+            }
+
+        });
+
+    }
 
 
     // ==========================================
@@ -234,6 +294,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================
+    // UTILITIES
+    // ==========================================
+
+    function shuffleArray(array) {
+
+        const shuffled = [...array];
+
+        for (let i = shuffled.length - 1; i > 0; i--) {
+
+            const j = Math.floor(Math.random() * (i + 1));
+
+            [shuffled[i], shuffled[j]] =
+                [shuffled[j], shuffled[i]];
+
+        }
+
+        return shuffled;
+    }
+
+
+    // ==========================================
     // COLOR GUESSING GAME
     // ==========================================
 
@@ -257,22 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "PINK", value: "#ff69b4" },
         { name: "CYAN", value: "#00cec9" }
     ];
-
-    function shuffleArray(array) {
-
-        const shuffled = [...array];
-
-        for (let i = shuffled.length - 1; i > 0; i--) {
-
-            const j = Math.floor(Math.random() * (i + 1));
-
-            [shuffled[i], shuffled[j]] =
-                [shuffled[j], shuffled[i]];
-
-        }
-
-        return shuffled;
-    }
 
     function startNewColorRound() {
 
@@ -332,7 +397,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentColorScore++;
 
             colorMessage.textContent = "🎉 CORRECT! NICE GUESS!";
-
             colorMessage.style.color = "#7AC74F";
 
             selectedButton.style.border = "4px solid white";
@@ -390,6 +454,236 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // ==========================================
+    // UNO GAME (Player vs CPU)
+    // ==========================================
+
+    const unoColors = ["red", "blue", "green", "yellow"];
+    const unoValues = ["0","1","2","3","4","5","6","7","8","9"];
+
+    const unoTopCardEl = document.getElementById("unoTopCard");
+    const unoPlayerHandEl = document.getElementById("unoPlayerHand");
+    const unoMessageEl = document.getElementById("unoMessage");
+    const unoCpuCountEl = document.getElementById("unoCpuCount");
+    const unoPlayerCountEl = document.getElementById("unoPlayerCount");
+    const startUnoGame = document.getElementById("startUnoGame");
+
+    let playerHand = [];
+    let cpuHand = [];
+    let unoTopCard = null;
+    let unoActive = false;
+    let unoCpuThinking = false;
+
+    function randomUnoCard() {
+
+        const color = unoColors[Math.floor(Math.random() * unoColors.length)];
+        const value = unoValues[Math.floor(Math.random() * unoValues.length)];
+
+        return { color, value };
+
+    }
+
+    function renderUnoCardInner(card) {
+        return `<span class="uno-color-dot" style="background:${card.color}"></span>${card.value}`;
+    }
+
+    function updateUnoUI() {
+
+        if (!unoTopCardEl || !unoPlayerHandEl) return;
+
+        // Top card
+        if (unoTopCard) {
+
+            unoTopCardEl.innerHTML = renderUnoCardInner(unoTopCard);
+
+            unoTopCardEl.className =
+                "uno-top-card uno-" + unoTopCard.color;
+
+        } else {
+
+            unoTopCardEl.textContent = "—";
+            unoTopCardEl.className = "uno-top-card";
+
+        }
+
+        // Player hand
+        unoPlayerHandEl.innerHTML = "";
+
+        playerHand.forEach((card, index) => {
+
+            const btn = document.createElement("button");
+
+            btn.type = "button";
+            btn.className = "uno-card uno-" + card.color;
+            btn.innerHTML = renderUnoCardInner(card);
+            btn.setAttribute(
+                "aria-label",
+                `Play ${card.color} ${card.value}`
+            );
+
+            btn.addEventListener("click", () => playUnoCard(index));
+
+            unoPlayerHandEl.appendChild(btn);
+
+        });
+
+        // Counts
+        if (unoCpuCountEl) {
+            unoCpuCountEl.textContent = cpuHand.length;
+        }
+
+        if (unoPlayerCountEl) {
+            unoPlayerCountEl.textContent = playerHand.length;
+        }
+
+    }
+
+    function canPlayUnoCard(card, top) {
+
+        if (!card || !top) return false;
+
+        return card.color === top.color || card.value === top.value;
+
+    }
+
+    function playUnoCard(index) {
+
+        if (!unoActive || unoCpuThinking) return;
+
+        const card = playerHand[index];
+
+        if (!card) return;
+
+        if (!canPlayUnoCard(card, unoTopCard)) {
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent =
+                    "❌ Cannot play that card — must match color or number.";
+                unoMessageEl.style.color = "#E94E3D";
+            }
+
+            return;
+
+        }
+
+        // Play the card
+        playerHand.splice(index, 1);
+
+        unoTopCard = card;
+
+        updateUnoUI();
+
+        if (playerHand.length === 0) {
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent =
+                    "🎉 YOU WIN! Press START GAME to play again.";
+                unoMessageEl.style.color = "#7AC74F";
+            }
+
+            unoActive = false;
+            return;
+
+        }
+
+        if (unoMessageEl) {
+            unoMessageEl.textContent = "⏳ CPU is thinking...";
+            unoMessageEl.style.color = "";
+        }
+
+        unoCpuThinking = true;
+
+        setTimeout(cpuTurn, 800);
+
+    }
+
+    function cpuTurn() {
+
+        if (!unoActive) {
+            unoCpuThinking = false;
+            return;
+        }
+
+        const playableIndex = cpuHand.findIndex(card =>
+            canPlayUnoCard(card, unoTopCard)
+        );
+
+        if (playableIndex !== -1) {
+
+            // CPU plays a card
+            unoTopCard = cpuHand.splice(playableIndex, 1)[0];
+
+            updateUnoUI();
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent =
+                    `🤖 CPU played ${unoTopCard.color.toUpperCase()} ${unoTopCard.value}`;
+                unoMessageEl.style.color = "";
+            }
+
+        } else {
+
+            // CPU draws a card
+            const drawn = randomUnoCard();
+
+            cpuHand.push(drawn);
+
+            updateUnoUI();
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent = "🤖 CPU drew a card.";
+                unoMessageEl.style.color = "";
+            }
+
+        }
+
+        // Check CPU win
+        if (cpuHand.length === 0) {
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent =
+                    "💀 CPU WINS! Press START GAME to try again.";
+                unoMessageEl.style.color = "#E94E3D";
+            }
+
+            unoActive = false;
+            unoCpuThinking = false;
+            return;
+
+        }
+
+        unoCpuThinking = false;
+
+        if (unoMessageEl && unoActive) {
+            unoMessageEl.textContent = "Your turn! Pick a matching card.";
+        }
+
+    }
+
+    if (startUnoGame) {
+
+        startUnoGame.addEventListener("click", () => {
+
+            playerHand = Array.from({ length: 7 }, randomUnoCard);
+            cpuHand = Array.from({ length: 7 }, randomUnoCard);
+            unoTopCard = randomUnoCard();
+
+            unoActive = true;
+            unoCpuThinking = false;
+
+            if (unoMessageEl) {
+                unoMessageEl.textContent =
+                    "Your turn! Pick a card that matches color or number.";
+                unoMessageEl.style.color = "";
+            }
+
+            updateUnoUI();
+
+        });
+
+    }
+
+
+    // ==========================================
     // MEMORY MATCH GAME
     // ==========================================
 
@@ -399,12 +693,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const memoryMessage = document.getElementById("memoryMessage");
     const restartMemory = document.getElementById("restartMemory");
 
-    const memorySymbols = [
-        "♠",
-        "♥",
-        "♦",
-        "♣"
-    ];
+    const memorySymbols = ["♠", "♥", "♦", "♣"];
 
     let memoryFirstCard = null;
     let memorySecondCard = null;
@@ -594,6 +883,6 @@ document.addEventListener("DOMContentLoaded", () => {
         colorMessage.textContent = "Press START GAME to begin!";
     }
 
-    console.log("Gelgel Portfolio and Secret Arcade Loaded!");
+    console.log("✅ Gelgel Portfolio and Secret Arcade Loaded!");
 
 });
