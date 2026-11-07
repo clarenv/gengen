@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gelgel | The High Roller Portfolio</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Gamit ang url_for para siguradong mahanap ang CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -15,10 +18,10 @@
     </button>
 
     <audio id="bgMusic" loop>
-        <source src="/static/audio/spa.mp3" type="audio/mpeg">
+        <source src="{{ url_for('static', filename='audio/spa.mp3') }}" type="audio/mpeg">
     </audio>
 
-    <!-- SECRET BUTTON (Lalabas kapag pinindot ang logo ng 3 beses) -->
+    <!-- SECRET BUTTON -->
     <a href="/arcade" id="secretGamesBtn" class="secret-games-btn" style="display: none; text-decoration: none;">
         🎮 ENTER SECRET ARCADE
     </a>
@@ -55,7 +58,10 @@
                     <div class="frame-corner top-right">♥</div>
                     <div class="frame-corner bottom-left">♣</div>
                     <div class="frame-corner bottom-right">♦</div>
-                   <img src="{{ url_for('static', filename='img/Nakamura Kazuha.jpg') }}" alt="Gelgel" class="profile-img">
+                    
+                    <!-- ITO ANG INayos: Walang space sa filename -->
+                    <img src="{{ url_for('static', filename='img/Nakamura_Kazuha.jpg') }}" alt="Gelgel" class="profile-img">
+                    
                     <div class="glow-layer"></div>
                 </div>
             </div>
@@ -145,6 +151,7 @@
         </div>
     </footer>
 
-    <script src="/static/js/script.js"></script>
+    <!-- Gamit ang url_for para siguradong mahanap ang JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
