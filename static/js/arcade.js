@@ -1,140 +1,220 @@
-/* ==================================
-   ARCADE MAIN STYLES
-================================== */
-:root {
-    --bg-dark: #0a0505;
-    --bg-card: #140a0a;
-    --gold: #D4AF37;
-    --gold-bright: #FFD700;
-    --text-main: #f5f5f5;
-    --text-muted: #a3a3a3;
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Montserrat', sans-serif;
+// --- TABS LOGIC ---
+function switchTab(evt, id) {
+    // Alisin active sa lahat ng tabs at panels
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    
+    // Gawing active yung pinindot
+    evt.currentTarget.classList.add('active');
+    document.getElementById(id).classList.add('active');
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+// ==========================================
+// 1. COLOR GAME LOGIC
+// ==========================================
+const colorsList = [
+    { name: "RED", hex: "#e74c3c" }, { name: "BLUE", hex: "#3498db" }, 
+    { name: "GREEN", hex: "#2ecc71" }, { name: "YELLOW", hex: "#f1c40f" }, 
+    { name: "PURPLE", hex: "#9b59b6" }, { name: "ORANGE", hex: "#e67e22" }
+];
+let cAns = "", cPoint = 0, cPlay = false;
 
-body {
-    font-family: var(--font-body);
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-    background-image: 
-        linear-gradient(45deg, #1a0a0a 25%, transparent 25%, transparent 75%, #1a0a0a 75%, #1a0a0a),
-        linear-gradient(45deg, #1a0a0a 25%, transparent 25%, transparent 75%, #1a0a0a 75%, #1a0a0a);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
+function startColor() {
+    if(document.getElementById('cStart').innerText === "START GAME") { 
+        cPoint = 0; document.getElementById('cScore').innerText = 0; 
+    }
+    cPlay = true;
+    document.getElementById('cStart').innerText = "NEXT ROUND";
+    document.getElementById('cMsg').innerText = "Pick the right color!";
+    document.getElementById('cMsg').style.color = "";
+    
+    // Shuffle at pumili ng 4 na kulay
+    let shuffled = [...colorsList].sort(() => 0.5 - Math.random());
+    let choices = shuffled.slice(0, 4);
+    let winner = choices[Math.floor(Math.random() * 4)];
+    
+    cAns = winner.name;
+    let box = document.getElementById('cBox');
+    box.innerText = winner.name;
+    box.style.background = winner.hex;
+    
+    let opts = document.getElementById('cOpts');
+    opts.innerHTML = "";
+    choices.forEach(c => {
+        let btn = document.createElement("button");
+        btn.className = "c-btn";
+        btn.style.background = c.hex;
+        btn.onclick = () => {
+            if(!cPlay) return;
+            cPlay = false;
+            
+            let msg = document.getElementById('cMsg');
+            if(c.name === cAns) {
+                cPoint++;
+                document.getElementById('cScore').innerText = cPoint;
+                msg.innerText = "✅ CORRECT!";
+                msg.style.color = "#2ecc71";
+            } else {
+                msg.innerText = "❌ WRONG! It was " + cAns;
+                msg.style.color = "#e74c3c";
+            }
+        };
+        opts.appendChild(btn);
+    });
 }
 
-.gold-text { color: var(--gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+// ==========================================
+// 2. UNO GAME LOGIC
+// ==========================================
+let pCards = [], cCards = [], currentTop = null;
+const uCols = ["red", "blue", "green", "yellow"];
 
-.arcade-container {
-    width: 100%;
-    max-width: 900px;
-    background: var(--bg-card);
-    border: 2px solid var(--gold);
-    border-radius: 16px;
-    padding: 40px 30px;
-    box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
-    position: relative;
+function getNewCard() {
+    return { 
+        color: uCols[Math.floor(Math.random()*4)], 
+        num: Math.floor(Math.random()*10).toString() 
+    };
 }
 
-.back-btn {
-    display: inline-block;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    transition: color 0.3s;
+function startUno() {
+    pCards = Array.from({length: 7}, getNewCard);
+    cCards = Array.from({length: 7}, getNewCard);
+    currentTop = getNewCard();
+    
+    document.getElementById('uMsg').innerText = "Your turn! Match color or number.";
+    document.getElementById('uMsg').style.color = "";
+    drawUno();
 }
-.back-btn:hover { color: var(--gold); }
 
-.arcade-heading { text-align: center; margin-bottom: 30px; }
-.arcade-heading span { color: var(--gold); font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; }
-.arcade-heading h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); margin: 10px 0; text-transform: uppercase; }
-.arcade-heading p { color: var(--text-muted); }
-.arcade-heading small { color: var(--gold); font-size: 0.7rem; letter-spacing: 2px; }
-
-/* ==================================
-   TABS
-================================== */
-.game-selection { display: flex; gap: 10px; justify-content: center; margin: 25px 0; flex-wrap: wrap; }
-.game-tab { 
-    padding: 12px 20px; background: var(--bg-dark); color: var(--text-muted); 
-    border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; 
-    cursor: pointer; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem; 
-    transition: all 0.3s; 
+function drawUno() {
+    let topEl = document.getElementById('uTop');
+    topEl.innerText = currentTop.num;
+    topEl.className = "u-top uno-" + currentTop.color;
+    
+    let handEl = document.getElementById('uHand');
+    handEl.innerHTML = "";
+    pCards.forEach((card, i) => {
+        let b = document.createElement("button");
+        b.className = "u-card uno-" + card.color;
+        b.innerText = card.num;
+        b.onclick = () => playUno(i);
+        handEl.appendChild(b);
+    });
+    
+    document.getElementById('uPCount').innerText = pCards.length;
+    document.getElementById('uCCount').innerText = cCards.length;
 }
-.game-tab.active { background: var(--gold); color: var(--bg-dark); border-color: var(--gold); }
-.game-tab:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
 
-.game-panel { display: none; text-align: center; padding: 20px 0; }
-.game-panel.active { display: block; }
-.game-panel h2 { color: var(--gold); margin-bottom: 10px; font-family: var(--font-heading); }
-.game-start-btn { 
-    margin-top: 20px; padding: 14px 32px; background: var(--gold); color: var(--bg-dark); 
-    border: none; border-radius: 6px; font-family: var(--font-body); font-weight: 800; 
-    font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; 
+function playUno(i) {
+    let card = pCards[i];
+    let msg = document.getElementById('uMsg');
+    
+    // Check kung valid
+    if(card.color !== currentTop.color && card.num !== currentTop.num) {
+        msg.innerText = "❌ Must match color or number!";
+        msg.style.color = "#e74c3c";
+        return;
+    }
+    
+    // I-play yung card
+    currentTop = pCards.splice(i, 1)[0];
+    drawUno();
+    
+    if(pCards.length === 0) { 
+        msg.innerText = "🎉 YOU WIN!"; 
+        msg.style.color = "#2ecc71";
+        return; 
+    }
+    
+    msg.innerText = "⏳ CPU is playing...";
+    msg.style.color = "";
+    
+    // CPU Turn
+    setTimeout(() => {
+        let cIdx = cCards.findIndex(c => c.color === currentTop.color || c.num === currentTop.num);
+        if(cIdx !== -1) {
+            currentTop = cCards.splice(cIdx, 1)[0];
+        } else {
+            cCards.push(getNewCard());
+        }
+        drawUno();
+        
+        if(cCards.length === 0) { 
+            msg.innerText = "💀 CPU WINS!"; 
+            msg.style.color = "#e74c3c";
+            return; 
+        }
+        
+        msg.innerText = "Your turn!";
+        msg.style.color = "";
+    }, 1000);
 }
-.game-start-btn:hover { background: var(--gold-bright); transform: translateY(-2px); }
 
-/* ==================================
-   COLOR GAME
-================================== */
-.color-display { 
-    width: 150px; height: 150px; margin: 20px auto; display: flex; 
-    align-items: center; justify-content: center; font-weight: 800; 
-    font-size: 1.2rem; border-radius: 12px; background: #333; 
-    border: 3px solid var(--gold); color: #fff; transition: 0.3s;
-}
-.color-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 400px; margin: 0 auto 20px; }
-.color-option { aspect-ratio: 1; border-radius: 8px; border: 2px solid #fff; cursor: pointer; transition: 0.2s; }
-.color-option:hover { transform: scale(1.1); }
+// ==========================================
+// 3. MEMORY GAME LOGIC
+// ==========================================
+let fCard = null, sCard = null, mCount = 0, pCount = 0, mLock = false;
 
-/* ==================================
-   UNO GAME
-================================== */
-.uno-stats, .memory-stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; color: #ccc; font-weight: 600; }
-.uno-stats b, .memory-stats b { color: var(--gold); }
-.uno-top-card { 
-    width: 90px; height: 130px; margin: 20px auto; border-radius: 10px; 
-    display: flex; align-items: center; justify-content: center; 
-    font-size: 2.5rem; font-weight: 800; color: #fff; 
-    background: #333; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+function initMemory() {
+    let grid = document.getElementById('mGrid');
+    grid.innerHTML = "";
+    
+    // Reset variables
+    fCard = null; sCard = null; mCount = 0; pCount = 0; mLock = false;
+    document.getElementById('mMoves').innerText = 0; 
+    document.getElementById('mPairs').innerText = 0;
+    document.getElementById('mMsg').innerText = "Find the pairs!";
+    document.getElementById('mMsg').style.color = "";
+    
+    // Gumawa ng pairs at i-shuffle
+    let symbols = ["♠", "♥", "♦", "♣", "♠", "♥", "♦", "♣"].sort(() => 0.5 - Math.random());
+    
+    symbols.forEach(s => {
+        let b = document.createElement("button");
+        b.className = "m-card";
+        b.dataset.sym = s;
+        b.innerText = "?";
+        b.onclick = () => flipMemory(b);
+        grid.appendChild(b);
+    });
 }
-.uno-hand { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; min-height: 110px; }
-.uno-card { 
-    width: 70px; height: 100px; border-radius: 8px; border: 3px solid #fff; 
-    color: #fff; font-size: 1.5rem; font-weight: 800; cursor: pointer; 
-    transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-}
-.uno-card:hover { transform: translateY(-8px); box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
-.uno-color-dot { width: 14px; height: 14px; border-radius: 50%; margin-bottom: 4px; border: 1px solid #fff; }
-.uno-red { background: #d32f2f; } .uno-blue { background: #1976d2; }
-.uno-green { background: #388e3c; } .uno-yellow { background: #fbc02d; color: #111; }
-.uno-yellow .uno-color-dot { border-color: #111; }
 
-/* ==================================
-   MEMORY GAME
-================================== */
-.memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 320px; margin: 20px auto; }
-.memory-card { 
-    aspect-ratio: 1; background: var(--bg-dark); border: 2px solid var(--gold); 
-    border-radius: 8px; color: var(--gold); font-size: 1.8rem; font-weight: 800;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;
+function flipMemory(b) {
+    if(mLock || b.classList.contains("flipped") || b.classList.contains("matched")) return;
+    
+    b.classList.add("flipped");
+    b.innerText = b.dataset.sym;
+    
+    if(!fCard) { fCard = b; return; }
+    sCard = b;
+    mCount++;
+    document.getElementById('mMoves').innerText = mCount;
+    
+    if(fCard.dataset.sym === sCard.dataset.sym) {
+        // Match!
+        fCard.classList.add("matched");
+        sCard.classList.add("matched");
+        pCount++;
+        document.getElementById('mPairs').innerText = pCount;
+        fCard = null; sCard = null;
+        
+        if(pCount === 4) {
+            let msg = document.getElementById('mMsg');
+            msg.innerText = "🏆 YOU WIN!";
+            msg.style.color = "#2ecc71";
+        }
+    } else {
+        // No match
+        mLock = true;
+        setTimeout(() => {
+            fCard.classList.remove("flipped"); fCard.innerText = "?";
+            sCard.classList.remove("flipped"); sCard.innerText = "?";
+            fCard = null; sCard = null; mLock = false;
+        }, 800);
+    }
 }
-.memory-card.flipped { background: var(--gold); color: var(--bg-dark); }
-.memory-card.matched { background: #2a1a0a; border-color: var(--gold-bright); color: var(--gold-bright); cursor: default; }
 
-/* ==================================
-   FOOTER
-================================== */
-.arcade-footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(212, 175, 55, 0.2); }
-.arcade-footer p { color: var(--gold); font-weight: 800; letter-spacing: 3px; }
-.arcade-footer small { color: var(--text-muted); font-size: 0.7rem; letter-spacing: 2px; }
+// Simulan ang Memory Game pagka-load ng page
+document.addEventListener("DOMContentLoaded", () => {
+    initMemory();
+});
