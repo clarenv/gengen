@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gelgel | The High Roller Portfolio</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 </head>
 
@@ -25,12 +26,13 @@
 
     <!-- AUDIO SOURCE -->
     <audio id="bgMusic" loop>
-        <source src="{{ url_for('static', filename='audio/spa.mp3') }}" type="audio/mpeg">
+        <source src="/static/audio/spa.mp3" type="audio/mpeg">
     </audio>
 
     <!-- NAVIGATION -->
     <header class="header">
         <div class="navbar container">
+
             <a href="#home" class="logo">GELGEL<span>♠</span></a>
 
             <button class="menu-toggle" id="menuToggle">MENU</button>
@@ -42,6 +44,7 @@
                 <li><a href="#projects">The Wins</a></li>
                 <li><a href="#contact" class="nav-contact">Book a Table ↗</a></li>
             </ul>
+
         </div>
     </header>
 
@@ -54,9 +57,15 @@
             <div class="neon-light light-2"></div>
 
             <div class="hero-text">
-                <div class="status-badge">✦ WELCOME TO THE VIP LOUNGE ✦</div>
 
-                <h1>PLACE YOUR <br><span class="gold-text">BETS.</span></h1>
+                <div class="status-badge">
+                    ✦ WELCOME TO THE VIP LOUNGE ✦
+                </div>
+
+                <h1>
+                    PLACE YOUR <br>
+                    <span class="gold-text">BETS.</span>
+                </h1>
 
                 <h2>I BUILD DIGITAL EXPERIENCES.</h2>
 
@@ -66,10 +75,14 @@
                     Step into my world of code and design.
                 </p>
 
-                <a href="#projects" class="btn btn-gold">VIEW MY WINS ↓</a>
+                <a href="#projects" class="btn btn-gold">
+                    VIEW MY WINS ↓
+                </a>
+
             </div>
 
             <div class="hero-visual">
+
                 <div class="neon-frame">
 
                     <div class="frame-corner top-left">♠</div>
@@ -77,15 +90,17 @@
                     <div class="frame-corner bottom-left">♣</div>
                     <div class="frame-corner bottom-right">♦</div>
 
-                    <!-- FIXED PROFILE IMAGE PATH -->
+                    <!-- PROFILE IMAGE -->
                     <img
-                        src="{{ url_for('static', filename='img/Nakamura Kazuha.jpg') }}"
+                        src="/static/img/Nakamura Kazuha.jpg"
                         alt="Gelgel"
                         class="profile-img"
                     >
 
                     <div class="glow-layer"></div>
+
                 </div>
+
             </div>
 
         </section>
@@ -101,6 +116,7 @@
             <div class="about-grid">
 
                 <div class="about-box">
+
                     <h3>WHO AM I?</h3>
 
                     <p>
@@ -113,20 +129,39 @@
                         When I'm not studying, I'm mastering new frameworks
                         and designing interfaces that command attention.
                     </p>
+
                 </div>
 
                 <div class="about-box">
+
                     <h3>MY STATS</h3>
 
                     <ul class="stats-list">
-                        <li><span class="stat-label">Creativity</span> <span class="stat-val">100%</span></li>
-                        <li><span class="stat-label">Problem Solving</span> <span class="stat-val">95%</span></li>
-                        <li><span class="stat-label">Coding</span> <span class="stat-val">90%</span></li>
-                        <li><span class="stat-label">Luck</span> <span class="stat-val">Sagad</span></li>
+                        <li>
+                            <span class="stat-label">Creativity</span>
+                            <span class="stat-val">100%</span>
+                        </li>
+
+                        <li>
+                            <span class="stat-label">Problem Solving</span>
+                            <span class="stat-val">95%</span>
+                        </li>
+
+                        <li>
+                            <span class="stat-label">Coding</span>
+                            <span class="stat-val">90%</span>
+                        </li>
+
+                        <li>
+                            <span class="stat-label">Luck</span>
+                            <span class="stat-val">Sagad</span>
+                        </li>
                     </ul>
+
                 </div>
 
             </div>
+
         </section>
 
         <!-- SKILLS SECTION -->
@@ -170,6 +205,7 @@
                 </div>
 
             </div>
+
         </section>
 
         <!-- PROJECTS SECTION -->
@@ -182,14 +218,17 @@
 
             <div class="projects-grid">
 
-                <!-- Project 1 -->
+                <!-- PROJECT 1 -->
                 <div class="project-card">
+
                     <div class="project-img bg-orange">
                         <span class="jackpot-tag">JACKPOT</span>
                     </div>
 
                     <div class="project-content">
+
                         <h3>Portfolio Website</h3>
+
                         <p>
                             A personal portfolio built with Flask
                             and high-end CSS animations.
@@ -199,17 +238,22 @@
                             <span>FLASK</span>
                             <span>CSS</span>
                         </div>
+
                     </div>
+
                 </div>
 
-                <!-- Project 2 -->
+                <!-- PROJECT 2 -->
                 <div class="project-card">
+
                     <div class="project-img bg-blue">
                         <span class="jackpot-tag">ROYAL FLUSH</span>
                     </div>
 
                     <div class="project-content">
+
                         <h3>Inventory System</h3>
+
                         <p>
                             A robust database management system
                             for managing high-volume data.
@@ -219,10 +263,13 @@
                             <span>PYTHON</span>
                             <span>MYSQL</span>
                         </div>
+
                     </div>
+
                 </div>
 
             </div>
+
         </section>
 
         <!-- CONTACT SECTION -->
@@ -243,20 +290,26 @@
                 <div class="contact-border-bottom"></div>
 
             </div>
+
         </section>
 
     </main>
 
     <!-- FOOTER -->
     <footer class="footer">
+
         <div class="container footer-content">
+
             <p>© 2026 GELGEL. ALL IN.</p>
+
             <a href="#home">BACK TO TOP ↑</a>
+
         </div>
+
     </footer>
 
     <!-- JAVASCRIPT -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="/static/js/script.js"></script>
 
 </body>
 </html>
