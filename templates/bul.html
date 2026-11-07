@@ -123,35 +123,38 @@
             </div>
         </section>
 
-        <!-- CERTIFICATES (SEMINARS) -->
+            <!-- CERTIFICATES (SEMINARS) -->
         <section class="section container" id="certs">
             <div class="section-header">
                 <h2>MY <span class="gold-text">CERTIFICATES</span></h2>
                 <div class="gold-line"></div>
             </div>
             <div class="grid-layout">
+                
                 <!-- Certificate 1 -->
                 <div class="card">
-                    <div class="card-img bg-cert">
-                        <div class="cert-icon">🏆</div>
-                        <div class="cert-text">Certificate of Completion</div>
+                    <div class="card-img bg-cert" style="padding: 0; background: #000;">
+                        <!-- PALITAN MO ITO NG PANGALAN NG FILE MO SA STATIC/IMG/ -->
+                        <img src="{{ url_for('static', filename='img/cert1.png') }}" alt="Web Dev Seminar Certificate" style="width: 100%; height: 200px; object-fit: cover;">
                     </div>
                     <div class="card-content">
                         <h3>Web Development Seminar 2025</h3>
                         <p>Successfully completed a 3-day intensive seminar on Modern Web Technologies held at Laguna University.</p>
                     </div>
                 </div>
+
                 <!-- Certificate 2 -->
                 <div class="card">
-                    <div class="card-img bg-cert">
-                        <div class="cert-icon">📜</div>
-                        <div class="cert-text">Certificate of Participation</div>
+                    <div class="card-img bg-cert" style="padding: 0; background: #000;">
+                        <!-- PALITAN MO ITO NG PANGALAN NG FILE MO SA STATIC/IMG/ -->
+                        <img src="{{ url_for('static', filename='img/cert2.jpg') }}" alt="IT Summit Certificate" style="width: 100%; height: 200px; object-fit: cover;">
                     </div>
                     <div class="card-content">
                         <h3>IT Summit & Hackathon</h3>
                         <p>Participated in the annual IT Summit, focusing on Artificial Intelligence and Software Innovations.</p>
                     </div>
                 </div>
+
             </div>
         </section>
 
