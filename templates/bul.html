@@ -1,0 +1,263 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gelgel | The High Roller Portfolio</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- SOUND TOGGLE BUTTON -->
+    <button id="audioBtn" class="audio-btn" aria-label="Toggle Sound">
+        <span class="icon">🔇</span>
+        <span class="btn-text">AUDIO</span>
+    </button>
+
+    <!-- AUDIO SOURCE -->
+    <audio id="bgMusic" loop>
+        <source src="{{ url_for('static', filename='audio/spa.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <!-- NAVIGATION -->
+    <header class="header">
+        <div class="navbar container">
+            <a href="#home" class="logo">GELGEL<span>♠</span></a>
+
+            <button class="menu-toggle" id="menuToggle">MENU</button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">The Lobby</a></li>
+                <li><a href="#about">The Player</a></li>
+                <li><a href="#skills">The Deck</a></li>
+                <li><a href="#projects">The Wins</a></li>
+                <li><a href="#contact" class="nav-contact">Book a Table ↗</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- HERO SECTION -->
+        <section class="hero container" id="home">
+
+            <div class="neon-light light-1"></div>
+            <div class="neon-light light-2"></div>
+
+            <div class="hero-text">
+                <div class="status-badge">✦ WELCOME TO THE VIP LOUNGE ✦</div>
+
+                <h1>PLACE YOUR <br><span class="gold-text">BETS.</span></h1>
+
+                <h2>I BUILD DIGITAL EXPERIENCES.</h2>
+
+                <p>
+                    An IT student who goes all-in on web development.
+                    I don't play games—I create them.
+                    Step into my world of code and design.
+                </p>
+
+                <a href="#projects" class="btn btn-gold">VIEW MY WINS ↓</a>
+            </div>
+
+            <div class="hero-visual">
+                <div class="neon-frame">
+
+                    <div class="frame-corner top-left">♠</div>
+                    <div class="frame-corner top-right">♥</div>
+                    <div class="frame-corner bottom-left">♣</div>
+                    <div class="frame-corner bottom-right">♦</div>
+
+                    <!-- FIXED PROFILE IMAGE PATH -->
+                    <img
+                        src="{{ url_for('static', filename='img/Nakamura_Kazuha.jpg') }}"
+                        alt="Gelgel"
+                        class="profile-img"
+                    >
+
+                    <div class="glow-layer"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section class="section container" id="about">
+
+            <div class="section-header">
+                <h2>THE <span class="gold-text">PLAYER</span></h2>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="about-grid">
+
+                <div class="about-box">
+                    <h3>WHO AM I?</h3>
+
+                    <p>
+                        Hello! I'm Gelgel, an Information Technology student.
+                        I treat every line of code like a high-stakes hand—calculated,
+                        precise, and aiming for perfection.
+                    </p>
+
+                    <p>
+                        When I'm not studying, I'm mastering new frameworks
+                        and designing interfaces that command attention.
+                    </p>
+                </div>
+
+                <div class="about-box">
+                    <h3>MY STATS</h3>
+
+                    <ul class="stats-list">
+                        <li><span class="stat-label">Creativity</span> <span class="stat-val">100%</span></li>
+                        <li><span class="stat-label">Problem Solving</span> <span class="stat-val">95%</span></li>
+                        <li><span class="stat-label">Coding</span> <span class="stat-val">90%</span></li>
+                        <li><span class="stat-label">Luck</span> <span class="stat-val">Sagad</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section class="section container" id="skills">
+
+            <div class="section-header">
+                <h2>THE <span class="gold-text">DECK</span></h2>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="skills-container">
+
+                <div class="skill-card">
+                    <span class="skill-suit">♠</span>
+                    <h4>HTML5</h4>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-suit">♥</span>
+                    <h4>CSS3</h4>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-suit">♣</span>
+                    <h4>JavaScript</h4>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-suit">♦</span>
+                    <h4>Python</h4>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-suit">♠</span>
+                    <h4>Flask</h4>
+                </div>
+
+                <div class="skill-card">
+                    <span class="skill-suit">♥</span>
+                    <h4>MySQL</h4>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section class="section container" id="projects">
+
+            <div class="section-header">
+                <h2>MY <span class="gold-text">WINS</span></h2>
+                <div class="gold-line"></div>
+            </div>
+
+            <div class="projects-grid">
+
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-img bg-orange">
+                        <span class="jackpot-tag">JACKPOT</span>
+                    </div>
+
+                    <div class="project-content">
+                        <h3>Portfolio Website</h3>
+                        <p>
+                            A personal portfolio built with Flask
+                            and high-end CSS animations.
+                        </p>
+
+                        <div class="tags">
+                            <span>FLASK</span>
+                            <span>CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-img bg-blue">
+                        <span class="jackpot-tag">ROYAL FLUSH</span>
+                    </div>
+
+                    <div class="project-content">
+                        <h3>Inventory System</h3>
+                        <p>
+                            A robust database management system
+                            for managing high-volume data.
+                        </p>
+
+                        <div class="tags">
+                            <span>PYTHON</span>
+                            <span>MYSQL</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section class="section container" id="contact">
+
+            <div class="contact-box">
+
+                <div class="contact-border-top"></div>
+
+                <h2>READY TO <span class="gold-text">DEAL?</span></h2>
+
+                <p>Let's build something legendary together.</p>
+
+                <a href="mailto:gelgel@example.com" class="btn btn-gold">
+                    SEND AN EMAIL ↗
+                </a>
+
+                <div class="contact-border-bottom"></div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>© 2026 GELGEL. ALL IN.</p>
+            <a href="#home">BACK TO TOP ↑</a>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
+```
