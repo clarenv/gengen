@@ -1,13 +1,19 @@
+import os
 from flask import Flask, render_template
 
-app = Flask(__name__)
+# --- ITO ANG FIX ---
+# Kinukuha natin yung exact folder kung nasaan ang app.py
+base_dir = os.path.abspath(os.path.dirname(__file__))
 
-# Ito yung Main Portfolio mo
+# Sinasabi natin kay Flask kung saan exact nakalagay ang templates at static
+app = Flask(__name__, 
+            template_folder=os.path.join(base_dir, 'templates'),
+            static_folder=os.path.join(base_dir, 'static'))
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# ITO YUNG KULANG! Kailangan ito para gumana ang /arcade
 @app.route('/arcade')
 def arcade():
     return render_template('arcade.html')
