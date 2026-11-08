@@ -196,10 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const routeColors = { JEEPNEY: '#F59E0B', BUS: '#3B82F6', TRICYCLE: '#10B981' };
 
         function buildMap(mapInstance) {
-            // Stadia Maps (Dark Mode) para walang "API KEY REQUIRED" watermark
-            L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-                maxZoom: 20,
-                attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+            // 🔥 FIX: CartoDB Dark Matter (Libre at walang API Key na kailangan)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
             }).addTo(mapInstance);
 
             data.routes.forEach(route => {
