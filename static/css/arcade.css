@@ -1,0 +1,288 @@
+/* ==================================
+   ROYAL MYSTIC ARCADE THEME
+================================== */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root { 
+    --bg-dark: #05030a; /* Deep midnight purple-black */
+    --bg-panel: rgba(20, 12, 28, 0.85); /* Dark mystical purple */
+    --accent-main: #D4AF37; /* Elegant Gold */
+    --accent-glow: #FFD700; /* Bright Gold */
+    --accent-blue: #7DF9FF; /* Electric Blue */
+    --text-main: #b8b2c4; /* Soft silver/lavender */
+    --text-bright: #ffffff;
+    --font-heading: 'Playfair Display', serif; 
+    --font-body: 'Montserrat', sans-serif; 
+    --font-monitor: 'VT323', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+    font-family: var(--font-body); 
+    background-color: var(--bg-dark); 
+    color: var(--text-main); 
+    display: flex; 
+    justify-content: center; 
+    padding: 40px 20px; 
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    
+    /* Mystical radial glow */
+    background: radial-gradient(circle at center, #150a24 0%, #05030a 70%);
+}
+
+/* Noise / Dust overlay */
+.noise-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+}
+
+.container { 
+    width: 100%; 
+    max-width: 800px; 
+    background: var(--bg-panel); 
+    border: 2px solid #2a1b3d; 
+    border-radius: 8px; /* Sharp/boxy look */
+    padding: 40px 30px; 
+    text-align: center; 
+    box-shadow: 
+        0 0 40px rgba(212, 175, 55, 0.1),
+        inset 0 0 50px rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+}
+
+/* Pseudo-element para magmukhang may gasgas at glowing edges */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px solid rgba(212, 175, 55, 0.15); /* Gold inner border */
+    pointer-events: none;
+}
+
+.back-btn { 
+    display: inline-block; 
+    color: #666; 
+    text-decoration: none; 
+    font-weight: 700; 
+    font-size: 0.8rem; 
+    margin-bottom: 20px; 
+    transition: 0.3s;
+    letter-spacing: 2px;
+}
+.back-btn:hover { color: var(--accent-main); text-shadow: 0 0 8px var(--accent-main); }
+
+/* ==================================
+   ROYAL TITLE EFFECT
+================================== */
+.neon-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px var(--accent-main),
+        0 0 20px var(--accent-main),
+        0 0 40px rgba(212, 175, 55, 0.4);
+    line-height: 1.1;
+}
+
+.neon-title .flicker {
+    animation: neonFlicker 4s infinite alternate;
+}
+
+@keyframes neonFlicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow: 
+            0 0 5px #fff,
+            0 0 10px var(--accent-main),
+            0 0 20px var(--accent-main),
+            0 0 40px rgba(212, 175, 55, 0.4);
+        opacity: 1;
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+        opacity: 0.6;
+    }
+}
+
+.subtitle {
+    font-family: var(--font-monitor);
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.gold { color: var(--accent-glow); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+.neon-score { color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-blue); font-family: var(--font-monitor); font-size: 1.5rem;}
+
+/* ==================================
+   TABS
+================================== */
+.tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+.tab { 
+    padding: 10px 20px; 
+    background: #0a0a0a; 
+    color: #555; 
+    border: 1px solid #333; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-family: var(--font-monitor);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    transition: 0.3s; 
+}
+.tab:hover { border-color: var(--accent-main); color: var(--accent-main); }
+.tab.active { 
+    background: rgba(212, 175, 55, 0.1); 
+    color: var(--accent-main); 
+    border-color: var(--accent-main); 
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 5px var(--accent-main);
+}
+
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn 0.5s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    color: var(--accent-main);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+/* ==================================
+   BUTTONS
+================================== */
+button.action { 
+    margin-top: 10px; 
+    padding: 12px 24px; 
+    background: #111; 
+    color: var(--accent-glow); 
+    border: 1px solid var(--accent-main); 
+    border-radius: 4px; 
+    font-family: var(--font-monitor);
+    font-size: 1.2rem; 
+    letter-spacing: 1px;
+    cursor: pointer; 
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+}
+button.action:hover:not(:disabled) { 
+    background: rgba(212, 175, 55, 0.15); 
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+button.action:disabled {
+    color: #333;
+    border-color: #222;
+    box-shadow: none;
+}
+
+/* ==================================
+   COLOR GAME
+================================== */
+.c-box { 
+    width: 120px; height: 120px; margin: 15px auto; display: flex; 
+    align-items: center; justify-content: center; font-weight: bold; 
+    border-radius: 50%; /* Bilog para mukhang lumang dice/monitor */
+    border: 4px solid #2a1b3d; 
+    color: #fff; font-size: 1.2rem; font-family: var(--font-monitor);
+    transition: 0.3s;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+.c-opts { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; flex-wrap: wrap; }
+.c-btn { 
+    width: 50px; height: 50px; border-radius: 8px; 
+    border: 2px solid #333; cursor: pointer; transition: 0.2s; 
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+.c-btn:hover:not(.selected-color) { transform: scale(1.1); border-color: var(--accent-main); }
+.c-btn.selected-color { border-color: var(--accent-glow); box-shadow: 0 0 15px var(--accent-glow); }
+
+/* ==================================
+   UNO GAME
+================================== */
+.u-top { 
+    width: 80px; height: 120px; margin: 15px auto; border-radius: 8px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 2rem; font-family: var(--font-monitor); color: white; 
+    background: #111; border: 3px solid #2a1b3d; box-shadow: 0 4px 15px rgba(0,0,0,0.8); 
+}
+.u-hand { display: flex; gap: 8px; justify-content: center; margin-top: 15px; flex-wrap: wrap; min-height: 90px; }
+.u-card { 
+    width: 60px; height: 90px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.2); 
+    color: white; font-size: 1.5rem; font-family: var(--font-monitor); font-weight: bold; 
+    cursor: pointer; display: flex; align-items: center; justify-content: center; 
+    transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+.u-card:hover { transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.8); border-color: var(--accent-main); }
+
+/* Uno Colors - Pinadilim pero eleganteng version */
+.uno-red { background: #8b1c1c; } 
+.uno-blue { background: #154f85; } 
+.uno-green { background: #1c5922; } 
+.uno-yellow { background: #a88b14; color: #fff; }
+
+/* ==================================
+   MEMORY GAME
+================================== */
+.m-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 300px; margin: 15px auto; }
+.m-card { 
+    height: 70px; background: #0a0a0a; border: 2px solid #2a1b3d; 
+    border-radius: 4px; color: #555; font-size: 1.5rem; font-family: var(--font-monitor); font-weight: bold; 
+    cursor: pointer; transition: 0.3s; 
+}
+.m-card:hover { border-color: var(--accent-main); }
+.m-card.flipped { background: #1a1024; color: var(--accent-blue); border-color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-blue); }
+.m-card.matched { background: #110505; border-color: var(--accent-main); color: var(--accent-glow); cursor: default; text-shadow: 0 0 10px var(--accent-glow); opacity: 0.6; }
+
+/* ==================================
+   HIDDEN ELEVATOR BUTTON
+================================== */
+#secret-elevator-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 28px;
+    text-decoration: none;
+    opacity: 0.05 !important; 
+    transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+    z-index: 1000;
+    cursor: pointer;
+    filter: grayscale(100%);
+}
+
+#secret-elevator-btn:hover {
+    opacity: 1 !important;
+    transform: translateY(5px);
+    filter: grayscale(0%) drop-shadow(0 0 10px var(--accent-glow));
+}
+
+/* ==================================
+   RESPONSIVE
+================================== */
+@media (max-width: 600px) {
+    .container { padding: 20px 15px; }
+    .neon-title { font-size: 2.5rem; }
+    .c-btn { width: 45px; height: 45px; }
+    .u-card { width: 50px; height: 75px; font-size: 1.2rem; }
+    button.action { padding: 10px 15px; font-size: 1rem; }
+    .tab { padding: 8px 12px; font-size: 1rem; }
+}

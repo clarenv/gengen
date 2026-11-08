@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Arcade | Gelgel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/arcade.css') }}">
+</head>
+<body>
+
+    <!-- HIDDEN ELEVATOR BUTTON -->
+    <a href="/secret-basement" id="secret-elevator-btn" title="Going down?">⬇️</a>
+
+    <!-- Background Smoke/Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <div class="container">
+        <a href="/" class="back-btn">← BACK TO LOBBY</a>
+        
+        <!-- Bagong Title with Neon Sign Effect -->
+        <h1 class="neon-title">
+            <span class="neon-text">THE</span> 
+            <span class="neon-text flicker">ARCADE</span>
+        </h1>
+        <p class="subtitle">// Welcome to the abandoned machines. //</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(event, 'tab-color')">🎨 COLOR</button>
+            <button class="tab" onclick="switchTab(event, 'tab-uno')">🃏 UNO</button>
+            <button class="tab" onclick="switchTab(event, 'tab-memory')">🧠 MEMORY</button>
+        </div>
+
+        <!-- COLOR GAME -->
+        <div class="panel active" id="tab-color">
+            <h2>GUESS THE COLOR</h2>
+            <p style="font-size: 0.9rem; color: #777; margin-bottom: 10px; font-style: italic;">Pick a color, then pull the lever.</p>
+            
+            <div class="c-opts" id="cPickerOpts" style="margin-bottom: 20px;"></div>
+            
+            <div class="c-box" id="cBox" style="background:#111; color: #555;">WAITING...</div>
+            
+            <h3 id="cMsg" style="margin-bottom: 15px;">Pick a color above!</h3>
+            <p>Score: <span id="cScore" class="neon-score">0</span></p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="action" id="cRollBtn" onclick="rollColorDice()" disabled style="opacity: 0.5; cursor: not-allowed;">PULL LEVER</button>
+                <button class="action" id="cAgainBtn" onclick="resetColor()" style="display: none;">PLAY AGAIN</button>
+            </div>
+        </div>
+
+        <!-- UNO GAME -->
+        <div class="panel" id="tab-uno">
+            <h2>UNO VS CPU</h2>
+            <p>Your Cards: <span id="uPCount" class="gold">0</span> | CPU Cards: <span id="uCCount" class="gold">0</span></p>
+            <div class="u-top" id="uTop">—</div>
+            <h3 id="uMsg">Press START!</h3>
+            <div class="u-hand" id="uHand"></div>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button class="action" onclick="startUno()" id="uStartBtn">START GAME</button>
+                <button class="action" onclick="drawCardUno()" id="uDrawBtn" style="display: none; background: #e74c3c; border: 1px solid #c0392b; color: white;">DRAW CARD</button>
+            </div>
+        </div>
+
+        <!-- MEMORY GAME -->
+        <div class="panel" id="tab-memory">
+            <h2>MEMORY MATCH</h2>
+            <p>Moves: <span id="mMoves" class="gold">0</span> | Pairs: <span id="mPairs" class="gold">0</span>/4 | <span id="mLimit" style="color: #e74c3c; font-weight: bold; text-shadow: 0 0 5px #e74c3c;">Guesses Left: 12</span></p>
+            <div class="m-grid" id="mGrid"></div>
+            <h3 id="mMsg">Press RESTART!</h3>
+            <button class="action" onclick="initMemory()">RESTART GAME</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/arcade.js') }}"></script>
+</body>
+</html>
