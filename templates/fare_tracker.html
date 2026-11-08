@@ -1,282 +1,108 @@
-// static/js/fare-tracker.js
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fare Tracker PH | Laguna</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Custom CSS (May Cache Buster) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fare-tracker.css') }}?v={{ range(1, 99999) | random }}">
+</head>
+<body>
 
-document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================
-    // 1. LOADING TRANSITION
-    // ==========================================
-    const loader = document.getElementById('loader');
-    const jeep = document.getElementById('jeep-svg');
-    const mainContent = document.getElementById('main-content');
-    const backBtn = document.getElementById('backBtn');
+  <!-- ==============================
+       LOADING OVERLAY (PAPASOK)
+  =============================== -->
+  <div id="loader" class="loader-overlay">
+    <div class="jeep-container">
+      <svg id="jeep-svg" class="jeep right" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="20" width="70" height="25" rx="5" fill="#F59E0B"/>
+        <rect x="20" y="10" width="50" height="15" rx="3" fill="#F59E0B"/>
+        <rect x="25" y="15" width="15" height="10" fill="#fff"/>
+        <rect x="45" y="15" width="15" height="10" fill="#fff"/>
+        <circle cx="25" cy="48" r="8" fill="#333"/>
+        <circle cx="65" cy="48" r="8" fill="#333"/>
+        <polygon points="80,25 95,25 85,35" fill="#FBBF24"/>
+      </svg>
+    </div>
+    <p class="loader-text">Papasok sa Fare Tracker...</p>
+  </div>
 
-    // Kapag pinindot ang back button
-    if (backBtn) {
-        backBtn.addEventListener('click', () => {
-            mainContent.classList.add('hidden'); // Itago ang dashboard
-            loader.classList.remove('fade-out'); // Ipakita ulit ang loader
-            
-            const loaderText = document.querySelector('.loader-text');
-            if(loaderText) loaderText.innerText = "Bumabalik sa Secret Room...";
-            
-            // Palitan ang direksyon ng jeep pabalik
-            if (jeep) {
-                jeep.classList.remove('right');
-                jeep.classList.add('left');
-            }
+  <!-- ==============================
+       MAIN DASHBOARD (NAKA-HIDE MUNA)
+  =============================== -->
+  <div id="main-content" class="hidden">
+    
+    <header class="app-header">
+      <button id="backBtn" class="icon-btn" title="Bumalik sa Secret Room">←</button>
+      <div class="header-title">
+        <h1>Fare Tracker Laguna</h1>
+        <p>Mula sa Bagumbayan, Sta. Cruz</p>
+      </div>
+      <div class="header-icon">🚐</div>
+    </header>
 
-            // Pagkatapos ng animation, lumipat pabalik sa secret room
-            setTimeout(() => {
-                window.location.href = "/secret-basement";
-            }, 1500);
-        });
-    }
+    <main class="home-container">
+      <section class="hero-section">
+        <h2>Saan ka pupunta ngayon?</h2>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Hanapin: Calamba, Pagsanjan, Magdalena..." autocomplete="off" />
+          <button id="searchBtn">🔍</button>
+        </div>
+        <div class="filter-chips">
+          <button class="chip active" data-type="ALL">Lahat</button>
+          <button class="chip" data-type="JEEPNEY">🚐 Jeepney</button>
+          <button class="chip" data-type="BUS">🚌 Bus</button>
+          <button class="chip" data-type="TRICYCLE">🛺 Tricycle</button>
+        </div>
+      </section>
 
-    // Dito natin i-run ang lohika ng dashboard pagkatapos ng loading
-    // Maghihintay tayo ng 2.5 seconds bago itago ang loader
-    setTimeout(() => {
-        if(loader) loader.classList.add('fade-out');
-        if(mainContent) mainContent.classList.remove('hidden');
-        
-        // I-initialize ang dashboard logic dito
-        initDashboard();
-    }, 2500);
+      <section class="routes-section">
+        <div class="section-header">
+          <h3 id="sectionTitle">Mga Ruta sa Laguna</h3>
+          <span class="count" id="routeCount"></span>
+        </div>
+        <div id="routesGrid" class="routes-grid"></div>
+      </section>
 
+      <section class="map-preview-section">
+        <div class="section-header">
+          <h3>Live Map Preview</h3>
+          <button id="expandMapBtn" class="text-btn">Palakihin →</button>
+        </div>
+        <div id="miniMap" class="mini-map"></div>
+      </section>
+      
+      <section class="notes-section" style="margin-top: 30px; padding: 15px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; font-size: 0.85rem; color: #a0a0c0;">
+          <p><strong>📌 Paalala:</strong> Para sa mga barangay na walang direktang ruta ng jeep (tulad ng ibang parte ng Bagumbayan), ang tricycle ang pangunahing transportasyon. Ang pamasahe ay karaniwang nagsisimula sa ₱20. Mas mabuting tanungin ang driver bago sumakay.</p>
+      </section>
+    </main>
 
-    // ==========================================
-    // 2. DASHBOARD LOGIC
-    // ==========================================
-    function initDashboard() {
-        const data = window.FARE_DATA;
-        if (!data) {
-            console.error("Fare data not loaded.");
-            return;
-        }
+    <!-- FULLSCREEN MAP MODAL -->
+    <div id="mapModal" class="map-modal hidden">
+      <button id="closeMapBtn" class="close-btn">✕</button>
+      <div id="fullMap" class="full-map"></div>
+      <div class="map-legend">
+        <span><span class="dot" style="background: #F59E0B;"></span> Jeepney</span>
+        <span><span class="dot" style="background: #3B82F6;"></span> Bus</span>
+        <span><span class="dot" style="background: #10B981;"></span> Tricycle</span>
+      </div>
+    </div>
 
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const routesGrid = document.getElementById('routesGrid');
-        const routeCount = document.getElementById('routeCount');
-        const sectionTitle = document.getElementById('sectionTitle');
-        const chips = document.querySelectorAll('.chip');
-        const expandMapBtn = document.getElementById('expandMapBtn');
-        const mapModal = document.getElementById('mapModal');
-        const closeMapBtn = document.getElementById('closeMapBtn');
+  </div>
 
-        let currentFilter = 'ALL';
-        let currentSearch = '';
-        let miniMapInstance = null;
-        let fullMapInstance = null;
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Dynamic Cache Buster: Pipilitin ang browser na kumuha ng bagong file tuwing mag-rereload -->
+  <script src="{{ url_for('static', filename='js/fare-data.js') }}?v={{ range(1, 99999) | random }}"></script>
+  <script src="{{ url_for('static', filename='js/fare-tracker.js') }}?v={{ range(1, 99999) | random }}"></script>
 
-        function calcFare(type, km) {
-            const rule = data.fares[type];
-            if (!rule) return 0;
-            let fare = rule.baseFare;
-            if (km > rule.baseKm) {
-                fare += (km - rule.baseKm) * rule.perKm;
-            }
-            return Math.max(rule.minFare, Math.round(fare * 100) / 100);
-        }
-
-        function renderRoutes() {
-            const q = currentSearch.toLowerCase();
-            let displayRoutes = [];
-
-            // 1. I-filter ang mga normal na ruta (Jeep, Bus, at yung mga nasa routes array)
-            const filteredRoutes = data.routes.filter(r => {
-                const matchType = currentFilter === 'ALL' || r.type === currentFilter;
-                const matchSearch = !q || 
-                    r.name.toLowerCase().includes(q) || 
-                    r.code.toLowerCase().includes(q) ||
-                    r.stops.some(s => s.name.toLowerCase().includes(q));
-                return matchType && matchSearch;
-            });
-            displayRoutes = [...filteredRoutes];
-
-            // 2. LOGIC PARA SA MGA BARANGAY (Tricycle Routes)
-            // Kung ang filter ay TRICYCLE, o ALL na may search, isama ang mga barangay.
-            if (currentFilter === 'TRICYCLE' || (currentFilter === 'ALL' && q)) {
-                if (data.barangays) {
-                    // Kung walang tinype (q is empty) at TRICYCLE ang pinindot, ipakita LAHAT.
-                    // Kung may tinype, i-filter lang ang mga tugmang barangay.
-                    const matchedBarangays = !q 
-                        ? data.barangays 
-                        : data.barangays.filter(b => b.toLowerCase().includes(q));
-                    
-                    matchedBarangays.forEach((brgy, index) => {
-                        displayRoutes.push({
-                            id: `brgy-${index}`,
-                            code: "LAG-TRI",
-                            name: `${brgy} (Lokal na Tricycle)`,
-                            type: "TRICYCLE",
-                            distanceKm: 2.0, // Default assumption
-                            estimatedMins: 10,
-                            stops: [
-                                { name: brgy, lat: 14.2780, lng: 121.4150 }, // Naka-pin muna sa sentro
-                                { name: "Sta. Cruz Town Proper", lat: 14.2780, lng: 121.4150 }
-                            ]
-                        });
-                    });
-                }
-            }
-
-            routeCount.textContent = `${displayRoutes.length} ruta`;
-            
-            // I-update ang title depende sa pinindot
-            if (currentSearch) {
-                sectionTitle.textContent = `Results for "${currentSearch}"`;
-            } else if (currentFilter === 'TRICYCLE') {
-                sectionTitle.textContent = 'Mga Lokal na Tricycle (Barangays)';
-            } else {
-                sectionTitle.textContent = 'Mga Ruta sa Laguna';
-            }
-
-            if (displayRoutes.length === 0) {
-                routesGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">Walang nahanap. Subukan ang ibang search.</p>`;
-                return;
-            }
-
-            routesGrid.innerHTML = displayRoutes.map(r => {
-                const fare = calcFare(r.type, r.distanceKm);
-                return `
-                    <div class="route-card ${r.type.toLowerCase()}" data-route-id="${r.id}">
-                        <div class="route-code">${r.code}</div>
-                        <h4>${r.name}</h4>
-                        <div class="route-meta">
-                            <span>🚏 ${r.stops.length} stops</span>
-                            <span>⏱ ~${r.estimatedMins} min</span>
-                            <span>📏 ${r.distanceKm} km</span>
-                        </div>
-                        <div class="route-fare">₱${fare.toFixed(2)} <small>base fare</small></div>
-                    </div>
-                `;
-            }).join('');
-
-            document.querySelectorAll('.route-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const routeId = card.dataset.routeId;
-                    // Hanapin sa displayRoutes imbes na sa data.routes para kasama ang mga barangay
-                    const route = displayRoutes.find(r => r.id === routeId);
-                    if (route) showRouteOnMap(route);
-                });
-            });
-        }
-
-        if (searchInput) {
-            let debounceTimer;
-            searchInput.addEventListener('input', (e) => {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    currentSearch = e.target.value.trim();
-                    renderRoutes();
-                }, 300);
-            });
-        }
-
-        if (searchBtn) {
-            searchBtn.addEventListener('click', () => {
-                currentSearch = searchInput.value.trim();
-                renderRoutes();
-            });
-        }
-
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                chips.forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                currentFilter = chip.dataset.type;
-                // Kapag pinindot ang Tricycle, i-clear ang search para lumabas lahat ng barangay
-                if (currentFilter === 'TRICYCLE') {
-                    currentSearch = '';
-                    searchInput.value = '';
-                }
-                renderRoutes();
-            });
-        });
-
-        const routeColors = { JEEPNEY: '#F59E0B', BUS: '#3B82F6', TRICYCLE: '#10B981' };
-
-        function buildMap(mapInstance) {
-            // 🔥 FIX: CartoDB Dark Matter (Libre at walang API Key na kailangan)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(mapInstance);
-
-            data.routes.forEach(route => {
-                const coords = route.stops.map(s => [s.lat, s.lng]);
-                L.polyline(coords, {
-                    color: routeColors[route.type] || '#fff',
-                    weight: 4,
-                    opacity: 0.7
-                }).addTo(mapInstance).bindPopup(`<b>${route.code}</b><br>${route.name}`);
-
-                route.stops.forEach((s, i) => {
-                    L.circleMarker([s.lat, s.lng], {
-                        radius: 5,
-                        color: routeColors[route.type] || '#fff',
-                        fillColor: '#05030f',
-                        fillOpacity: 1,
-                        weight: 2
-                    }).addTo(mapInstance).bindTooltip(`${i + 1}. ${s.name}`, { direction: 'top' });
-                });
-            });
-            return mapInstance;
-        }
-
-        if (document.getElementById('miniMap')) {
-            miniMapInstance = L.map('miniMap', { zoomControl: false }).setView([14.2780, 121.4150], 11);
-            buildMap(miniMapInstance);
-            
-            // FIX: I-invalidate ang size para mag-render nang tama pagkatapos ng animation
-            setTimeout(() => {
-                miniMapInstance.invalidateSize();
-            }, 500);
-        }
-
-        if (expandMapBtn) {
-            expandMapBtn.addEventListener('click', () => {
-                mapModal.classList.remove('hidden');
-                if (!fullMapInstance) {
-                    fullMapInstance = L.map('fullMap').setView([14.2780, 121.4150], 11);
-                    buildMap(fullMapInstance);
-                }
-                // FIX: Kailangan i-invalidate ang size kasi naka-hide ito noong una
-                setTimeout(() => fullMapInstance.invalidateSize(), 200);
-            });
-        }
-
-        if (closeMapBtn) {
-            closeMapBtn.addEventListener('click', () => {
-                mapModal.classList.add('hidden');
-            });
-        }
-
-        function showRouteOnMap(route) {
-            if (!miniMapInstance) return;
-            const coords = route.stops.map(s => [s.lat, s.lng]);
-            
-            // Kung iisang point lang (tulad ng barangay na naka-pin sa isang lugar), i-setView
-            if (coords.length === 1 || (coords[0][0] === coords[1][0] && coords[0][1] === coords[1][1])) {
-                miniMapInstance.setView(coords[0], 14);
-            } else {
-                miniMapInstance.fitBounds(coords, { padding: [30, 30] });
-            }
-
-            document.querySelector('.map-preview-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Maglagay ng pansamantalang highlight
-            if (coords.length > 1) {
-                const highlight = L.polyline(coords, {
-                    color: '#FFD700',
-                    weight: 8,
-                    opacity: 0.9
-                }).addTo(miniMapInstance);
-                
-                setTimeout(() => miniMapInstance.removeLayer(highlight), 2000);
-            }
-        }
-
-        renderRoutes();
-    }
-});
+</body>
+</html>
