@@ -18,5 +18,10 @@ def home():
 def arcade():
     return render_template('arcade.html')
 
+# BAGONG ROUTE PARA SA SECRET ROOM
+@app.route('/secret-basement')
+def secret_basement():
+    return render_template('secret.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
