@@ -30,6 +30,8 @@
             <button class="tab active" onclick="switchTab(event, 'tab-color')">🎨 COLOR</button>
             <button class="tab" onclick="switchTab(event, 'tab-uno')">🃏 UNO</button>
             <button class="tab" onclick="switchTab(event, 'tab-memory')">🧠 MEMORY</button>
+            <button class="tab" onclick="switchTab(event, 'tab-boom')">💣 BOOM</button>
+            <button class="tab" onclick="switchTab(event, 'tab-horse')">🐎 HORSE RACE</button>
         </div>
 
         <!-- COLOR GAME -->
@@ -71,6 +73,41 @@
             <div class="m-grid" id="mGrid"></div>
             <h3 id="mMsg">Press RESTART!</h3>
             <button class="action" onclick="initMemory()">RESTART GAME</button>
+        </div>
+
+        <!-- BOOM GAME (MINESWEEPER) -->
+        <div class="panel" id="tab-boom">
+            <h2>BOOM GAME</h2>
+            <p style="font-size: 0.9rem; color: #777; margin-bottom: 10px; font-style: italic;">Find the safe spots. One wrong click and... 💥</p>
+            <p style="margin-bottom: 15px;">Safe Spots Left: <span id="boomCount" class="gold">20</span></p>
+            <div class="boom-grid" id="boomGrid"></div>
+            <h3 id="boomMsg">Click START!</h3>
+            <button class="action" onclick="initBoom()" id="boomStartBtn">START GAME</button>
+        </div>
+
+        <!-- HORSE RACE -->
+        <div class="panel" id="tab-horse">
+            <h2>HORSE RACE</h2>
+            <p style="font-size: 0.9rem; color: #777; margin-bottom: 10px; font-style: italic;">Pick your horse, then start the race!</p>
+            
+            <div id="horseTrack" class="horse-track">
+                <div class="lane" id="lane0"><div class="horse"><span>🐎</span></div></div>
+                <div class="lane" id="lane1"><div class="horse"><span>🐎</span></div></div>
+                <div class="lane" id="lane2"><div class="horse"><span>🐎</span></div></div>
+                <div class="lane" id="lane3"><div class="horse"><span>🐎</span></div></div>
+                <div class="finish-line"></div>
+            </div>
+
+            <h3 id="horseMsg" style="margin-top: 20px;">Pick a horse above to bet!</h3>
+            
+            <div class="horse-picker">
+                <button class="h-btn" onclick="pickHorse(0)">Horse 1</button>
+                <button class="h-btn" onclick="pickHorse(1)">Horse 2</button>
+                <button class="h-btn" onclick="pickHorse(2)">Horse 3</button>
+                <button class="h-btn" onclick="pickHorse(3)">Horse 4</button>
+            </div>
+
+            <button class="action" onclick="startHorseRace()" id="horseStartBtn" disabled style="opacity: 0.5; cursor: not-allowed; margin-top: 15px;">START RACE</button>
         </div>
     </div>
 
