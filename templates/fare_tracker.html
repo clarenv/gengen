@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fare Tracker PH | Laguna</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Custom CSS para sa parehong Loading at Dashboard -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fare-tracker.css') }}">
+</head>
+<body>
+
+  <!-- ==============================
+       LOADING OVERLAY (PAPASOK)
+  =============================== -->
+  <div id="loader" class="loader-overlay">
+    <div class="jeep-container">
+      <svg id="jeep-svg" class="jeep right" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="20" width="70" height="25" rx="5" fill="#F59E0B"/>
+        <rect x="20" y="10" width="50" height="15" rx="3" fill="#F59E0B"/>
+        <rect x="25" y="15" width="15" height="10" fill="#fff"/>
+        <rect x="45" y="15" width="15" height="10" fill="#fff"/>
+        <circle cx="25" cy="48" r="8" fill="#333"/>
+        <circle cx="65" cy="48" r="8" fill="#333"/>
+        <polygon points="80,25 95,25 85,35" fill="#FBBF24"/>
+      </svg>
+    </div>
+    <p class="loader-text">Papasok sa Fare Tracker...</p>
+  </div>
+
+  <!-- ==============================
+       MAIN DASHBOARD (NAKA-HIDE MUNA)
+  =============================== -->
+  <div id="main-content" class="hidden">
+    
+    <header class="app-header">
+      <button id="backBtn" class="icon-btn" title="Bumalik sa Secret Room">←</button>
+      <div class="header-title">
+        <h1>Fare Tracker Laguna</h1>
+        <p>Mula sa Bagumbayan, Sta. Cruz</p>
+      </div>
+      <div class="header-icon">🚐</div>
+    </header>
+
+    <main class="home-container">
+      <section class="hero-section">
+        <h2>Saan ka pupunta ngayon?</h2>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Hanapin: Calamba, Pagsanjan, Magdalena..." autocomplete="off" />
+          <button id="searchBtn">🔍</button>
+        </div>
+        <div class="filter-chips">
+          <button class="chip active" data-type="ALL">Lahat</button>
+          <button class="chip" data-type="JEEPNEY">🚐 Jeepney</button>
+          <button class="chip" data-type="BUS">🚌 Bus</button>
+          <button class="chip" data-type="TRICYCLE">🛺 Tricycle</button>
+        </div>
+      </section>
+
+      <section class="routes-section">
+        <div class="section-header">
+          <h3 id="sectionTitle">Mga Ruta sa Laguna</h3>
+          <span class="count" id="routeCount"></span>
+        </div>
+        <div id="routesGrid" class="routes-grid"></div>
+      </section>
+
+      <section class="map-preview-section">
+        <div class="section-header">
+          <h3>Live Map Preview</h3>
+          <button id="expandMapBtn" class="text-btn">Palakihin →</button>
+        </div>
+        <div id="miniMap" class="mini-map"></div>
+      </section>
+      
+      <section class="notes-section" style="margin-top: 30px; padding: 15px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; font-size: 0.85rem; color: #a0a0c0;">
+          <p><strong>📌 Paalala:</strong> Para sa mga barangay na walang direktang ruta ng jeep (tulad ng ibang parte ng Bagumbayan), ang tricycle ang pangunahing transportasyon. Ang pamasahe ay karaniwang nagsisimula sa ₱20. Mas mabuting tanungin ang driver bago sumakay.</p>
+      </section>
+    </main>
+
+    <!-- FULLSCREEN MAP MODAL -->
+    <div id="mapModal" class="map-modal hidden">
+      <button id="closeMapBtn" class="close-btn">✕</button>
+      <div id="fullMap" class="full-map"></div>
+      <div class="map-legend">
+        <span><span class="dot" style="background: #F59E0B;"></span> Jeepney</span>
+        <span><span class="dot" style="background: #3B82F6;"></span> Bus</span>
+        <span><span class="dot" style="background: #10B981;"></span> Tricycle</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='js/fare-data.js') }}"></script>
+  
+  <!-- Bagong JS Logic para sa Transition at Dashboard -->
+  <script src="{{ url_for('static', filename='js/fare-tracker.js') }}"></script>
+
+</body>
+</html>
