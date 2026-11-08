@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     // ==========================================
-    // 1. DEFAULT DATA (Hardcoded Images)
+    // 1. DEFAULT DATA (Hardcoded Images - No Links)
     // ==========================================
     const defaultData = {
         name: "CLARENCE",
@@ -14,45 +14,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 title: "Food Ordering System", 
                 desc: "A full-stack mobile application for online food ordering with cart functionality and real-time order tracking.", 
                 cat: "app", 
-                img: "/static/img/food-app.png", // Hardcoded Image
-                link: ""
+                img: "/static/img/food-app.png" 
             },
             { 
                 title: "Sharing Memory & Messaging", 
                 desc: "A social mobile app where users can share memories, post photos, and chat with friends in real-time.", 
                 cat: "app", 
-                img: "/static/img/messaging-app.png", // Hardcoded Image
-                link: ""
+                img: "/static/img/messaging-app.png" 
             },
             // --- WEB ---
             { 
                 title: "The Arcade Room", 
                 desc: "An interactive web-based mini-game hub featuring classic games like UNO, Color Game, Minesweeper, and Horse Race.", 
                 cat: "web", 
-                img: "/static/img/arcade-thumb.png", // Hardcoded Image
-                link: "/arcade"
+                img: "/static/img/arcade-thumb.png" 
             },
             { 
                 title: "Secret Orbit Room", 
                 desc: "A romantic, interactive galaxy-themed website where messages orbit around a central moon. Accessible via a secret elevator.", 
                 cat: "web", 
-                img: "/static/img/orbit-room.png", // Hardcoded Image
-                link: "/secret-basement"
+                img: "/static/img/orbit-room.png" 
             },
             // --- EXISTING PROJECTS ---
             { 
                 title: "Capstone Project App", 
                 desc: "A comprehensive system built for my capstone requirement.", 
                 cat: "app", 
-                img: "", 
-                link: ""
+                img: "" 
             },
             { 
                 title: "Personal E-Commerce Web", 
                 desc: "An online store platform built with a sleek UI.", 
                 cat: "web", 
-                img: "", 
-                link: ""
+                img: "" 
             }
         ],
         
@@ -90,20 +84,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Projects (With Hardcoded Images & Clickable Links)
+        // Projects (Display Only - Walang Link o Button)
         const projGrid = document.getElementById('projectsGrid');
         if(projGrid) {
             projGrid.innerHTML = '';
             siteData.projects.forEach(p => {
-                const clickAttr = p.link ? `onclick="window.location.href='${p.link}'" style="cursor: pointer;"` : '';
-                
-                // Kung may image, ipakita. Kung wala, ipakita ang placeholder.
                 const imgContent = p.img 
                     ? `<img src="${p.img}" alt="${p.title}" style="width:100%; height:100%; object-fit:cover;">` 
                     : `<span class="tag">PROJECT</span>`;
 
                 projGrid.innerHTML += `
-                    <div class="card" data-cat="${p.cat}" data-title="${p.title.toLowerCase()}" ${clickAttr}>
+                    <div class="card" data-cat="${p.cat}" data-title="${p.title.toLowerCase()}">
                         <div class="card-img ${p.img ? '' : 'bg-app1'}">
                             ${imgContent}
                         </div>
@@ -285,7 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        // Demo only - no backend
         feedback.innerText = "Message sent! (Note: Demo only, no backend connected yet.)";
         feedback.className = "feedback success";
         document.getElementById('contactForm').reset();
@@ -350,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const img = document.getElementById('newProjImg') ? document.getElementById('newProjImg').value.trim() : ""; 
         
         if(title && desc) {
-            siteData.projects.push({ title, desc, cat, img: img, link: "" });
+            siteData.projects.push({ title, desc, cat, img: img });
             localStorage.setItem('casinoPortfolio', JSON.stringify(siteData));
             renderAll();
             alert('Project Added!');
