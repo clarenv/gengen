@@ -23,5 +23,10 @@ def arcade():
 def secret_basement():
     return render_template('secret.html')
 
+# BAGONG ROUTE PARA SA FARE TRACKER (MOBILE APP)
+@app.route('/secret-basement/fare-tracker')
+def fare_tracker():
+    return render_template('fare_tracker.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
